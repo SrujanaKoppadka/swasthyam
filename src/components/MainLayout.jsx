@@ -8,7 +8,7 @@ import {
 	ChevronRight,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import swasthyamlogo from "../assets/swasthyam-logo.jpg"
+import swasthyamlogo from "../assets/swasthyam-logo.png"
 import { cn } from "../lib/utils";
 import { FaWhatsapp } from "react-icons/fa";
 
@@ -117,16 +117,17 @@ function Header() {
 			className={cn(
 				"sticky top-0 z-40 w-full transition-all duration-300",
 				isScrolled
-					? "bg-white/95 backdrop-blur-md shadow-md border-b border-blue-100 h-16"
-					: "bg-white h-16 shadow-sm border-b border-blue-50",
+					? "bg-white/95 backdrop-blur-md shadow-md border-b border-blue-100 h-20"
+					: "bg-white h-20 shadow-sm border-b border-blue-50",
 			)}
 		>
 			<div className="px-6 max-w-7xl mx-auto flex items-center justify-between h-full">
-				<Link to="/" className="flex items-center group h-full py-2">
+				<Link to="/" className="flex items-center h-full py-1">
 					<img
 						src={swasthyamlogo}
 						alt="Swasthyam Super Speciality Hospital"
-						className="h-16 w-auto object-contain transition-transform group-hover:scale-105"
+						className="h-[4.5rem] w-auto object-contain"
+						style={{ imageRendering: "auto" }}
 					/>
 				</Link>
 				{/* Desktop Nav */}
@@ -229,24 +230,13 @@ function Footer() {
 			<div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
 				{/* Brand */}
 				<div>
-					<Link to="/" className="flex items-center gap-3 mb-6 group">
-						<div
-							className="w-10 h-10 rounded-full flex items-center justify-center p-1.5 transition-transform group-hover:scale-105"
-							style={{ background: "linear-gradient(135deg,#1a6fc4,#0e4a8a)" }}
-						>
-							<div className="w-full h-full border-4 border-white/60 rounded-full border-t-white"></div>
-						</div>
-						<div>
-							<div className="font-bold text-xl tracking-tighter leading-none text-white">
-								SWASTHYAM
-							</div>
-							<div
-								className="text-[10px] uppercase tracking-[0.2em] font-semibold"
-								style={{ color: "#e05c1a" }}
-							>
-								Super Specialty Hospital
-							</div>
-						</div>
+					<Link to="/" className="flex items-center gap-3 mb-6">
+						<img
+							src={swasthyamlogo}
+							alt="Swasthyam Super Speciality Hospital"
+							className="h-20 w-auto object-contain rounded-lg"
+							style={{ imageRendering: "auto" }}
+						/>
 					</Link>
 					<p className="text-blue-200 mb-6 font-semibold italic text-lg tracking-wide">
 						"Your Health, Our Priority"

@@ -2,22 +2,51 @@ import PageHeader from "../components/PageHeader";
 import { MapPin, Phone, Clock, Send, } from "lucide-react";
 import { useState } from "react";
 import {FaWhatsapp} from "react-icons/fa";
+import {supabase} from "../supabase";
 
 export default function Contact() {
 	const [formData, setFormData] = useState({
 		name: "",
 		phone: "",
+		email: "",
 		department: "",
 		date: "",
 		message: "",
 	});
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		alert("Appointment request submitted. We will contact you shortly.");
-		setFormData({ name: "", phone: "", department: "", date: "", message: "" });
-	};
 
+		const { error } = await supabase.from("contactdetails").insert([
+			{
+				full_name: formData.name,
+				phone_number: formData.phone,
+				email: formData.email || null,
+				department: formData.department,
+				date: formData.date || null,
+				message: formData.message,
+				status: "new",
+				source: "contact_page",
+			},
+		]);
+
+		if (error) {
+			console.error(error);
+			alert("Failed to submit appointment request");
+			return;
+		}
+
+		alert("Appointment request submitted successfully!");
+
+		setFormData({
+			name: "",
+			phone: "",
+			email: "",
+			department: "",
+			date: "",
+			message: "",
+		});
+	};
 	return (
 		<div className="bg-[#f4f8ff] min-h-screen pb-24">
 			<PageHeader
@@ -129,15 +158,14 @@ export default function Contact() {
 						</a>
 
 						<a
-							href="https://wa.me/919008608842?text=I want to book an appointment"
-							target="_blank"
-							rel="noopener noreferrer"
-							className="bg-green-500 hover:bg-green-600 text-white text-center py-3 rounded-lg font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 transition-colors"
-						>
-							<div>
-								<FaWhatsapp />
-							</div>
-						</a>
+						href="https://wa.me/919008608842?text=I want to book an appointment"
+						target="_blank"
+						rel="noopener noreferrer"
+						className="flex-1 bg-green-500 hover:bg-green-600 text-white text-center py-3 px-6 rounded-lg font-bold uppercase tracking-widest text-[11px] flex items-center justify-center gap-2 transition-colors"
+					>
+						<FaWhatsapp className="w-5 h-5" />
+						WhatsApp Us
+					</a>
 					</div>
 
 					<div className="rounded overflow-hidden border border-blue-100 h-[300px] relative bg-slate-100">
@@ -198,6 +226,21 @@ export default function Contact() {
 									}
 									className="w-full bg-blue-50 border border-blue-100 rounded px-4 py-3 text-[#1a2340] focus:outline-none focus:border-brand-orange transition-all text-sm"
 									placeholder="+91"
+								/>
+							</div>
+
+							<div>
+								<label className="block text-[10px] uppercase tracking-widest text-brand-gold mb-1.5">
+									Email Address
+								</label>
+								<input
+									type="email"
+									value={formData.email}
+									onChange={(e) =>
+										setFormData({ ...formData, email: e.target.value })
+									}
+									className="w-full bg-blue-50 border border-blue-100 rounded px-4 py-3 text-[#1a2340] focus:outline-none focus:border-brand-orange transition-all text-sm"
+									placeholder="your@email.com"
 								/>
 							</div>
 

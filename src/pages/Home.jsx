@@ -14,7 +14,9 @@ import {
 	MapPin,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "../supabase";
+import swasthyamimg from "../assets/swasthyam-hospital.webp"
 
 // Simple hook for scroll-based reveal
 function useScrollReveal() {
@@ -161,105 +163,7 @@ function HeroSection() {
 					</div>
 				</div>
 
-				<div className="hidden lg:block lg:col-span-5">
-					<div
-						className="rounded-2xl p-8 shadow-2xl animate-scale-in delay-300 card-lift"
-						style={{
-							background: "#ffffff",
-							border: "1px solid #d5e3f5",
-							boxShadow: "0 20px 60px rgba(26,111,196,0.12)",
-						}}
-					>
-						<h3 className="text-xl font-bold mb-1" style={{ color: "#1a2340" }}>
-							Quick Booking
-						</h3>
-						<p className="text-sm mb-6" style={{ color: "#7a8aaa" }}>
-							Fill in the details to schedule your visit.
-						</p>
-
-						<div className="space-y-4">
-							<div className="grid grid-cols-2 gap-4">
-								<div>
-									<label
-										className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold"
-										style={{ color: "#1a6fc4" }}
-									>
-										Patient Name
-									</label>
-									<input
-										type="text"
-										placeholder="Enter Patient Name"
-										className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all"
-										style={{
-											borderColor: "#d5e3f5",
-											color: "#1a2340",
-											background: "#f4f8ff",
-										}}
-									/>
-								</div>
-								<div>
-									<label
-										className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold"
-										style={{ color: "#1a6fc4" }}
-									>
-										Phone Number
-									</label>
-									<input
-										type="tel"
-										placeholder="+91"
-										className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all"
-										style={{
-											borderColor: "#d5e3f5",
-											color: "#1a2340",
-											background: "#f4f8ff",
-										}}
-									/>
-								</div>
-							</div>
-							<div>
-								<label
-									className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold"
-									style={{ color: "#1a6fc4" }}
-								>
-									Specialty
-								</label>
-								<select
-									className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all appearance-none"
-									style={{
-										borderColor: "#d5e3f5",
-										color: "#1a2340",
-										background: "#f4f8ff",
-									}}
-								>  
-									<option>Cardiology</option>
-									<option>Orthopedics</option>
-									<option>Neurology</option>
-									<option>General Medicine</option>
-								</select>
-							</div>
-							<button
-								type="button"
-								className="btn-primary w-full justify-center mt-2 text-sm py-4"
-							>
-								Confirm Appointment
-							</button>
-						</div>
-
-						<div
-							className="mt-6 pt-6 flex items-center justify-between text-[11px]"
-							style={{ borderTop: "1px solid #eaf1fb", color: "#7a8aaa" }}
-						>
-							<p>Need immediate help?</p>
-							<a
-								href="tel:9901984418"
-								className="font-bold uppercase tracking-wider"
-								style={{ color: "#e05c1a" }}
-							>
-								Call 9901984418
-							</a>
-						</div>
-					</div>
-				</div>
+				<HeroBookingForm />
 			</div>
 		</section>
 	);
@@ -420,7 +324,7 @@ function WhyChooseUs() {
 						}}
 					></div>
 					<img
-						src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
+						src={swasthyamimg}
 						alt="Excellent Care"
 						className="rounded-2xl relative z-10 w-full"
 						style={{
@@ -754,59 +658,163 @@ function CTASection() {
 						</div>
 					</div>
 
-					<div
-						className="md:w-5/12 w-full rounded-2xl p-8 relative z-10"
-						style={{
-							background: "#ffffff",
-							boxShadow: "0 10px 40px rgba(0,0,0,0.15)",
-						}}
-					>
-						<h3
-							className="text-xl font-bold mb-6 text-center"
-							style={{ color: "#1a2340" }}
-						>
-							Quick Appointment
-						</h3>
-						<div className="space-y-4">
-							<input
-								type="text"
-								placeholder="Your Name"
-								className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-								style={{
-									borderColor: "#d5e3f5",
-									color: "#1a2340",
-									background: "#f4f8ff",
-								}}
-							/>
-							<input
-								type="tel"
-								placeholder="Phone Number"
-								className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all"
-								style={{
-									borderColor: "#d5e3f5",
-									color: "#1a2340",
-									background: "#f4f8ff",
-								}}
-							/>
-							<select
-								className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all appearance-none"
-								style={{
-									borderColor: "#d5e3f5",
-									color: "#1a2340",
-									background: "#f4f8ff",
-								}}
-							>
-								<option>General Query</option>
-								<option>Cardiology</option>
-								<option>Orthopedics</option>
-							</select>
-							<button className="btn-primary w-full justify-center mt-2 text-sm py-4">
-								Request Callback
-							</button>
-						</div>
-					</div>
+					<CTACallbackForm />
 				</div>
 			</div>
 		</section>
+	);
+}
+
+const DEPARTMENT_OPTIONS = [
+	{ value: "", label: "Select Department" },
+	{ value: "general_medicine", label: "General Medicine" },
+	{ value: "cardiology", label: "Cardiology" },
+	{ value: "orthopedics", label: "Orthopedics" },
+	{ value: "neurology", label: "Neurology" },
+	{ value: "pediatrics", label: "Pediatrics" },
+	{ value: "gynecology", label: "Gynecology & Obstetrics" },
+	{ value: "ent", label: "ENT" },
+	{ value: "dermatology", label: "Dermatology" },
+	{ value: "urology", label: "Urology" },
+	{ value: "icu_trauma", label: "ICU & Trauma" },
+	{ value: "physiotherapy", label: "Physiotherapy" },
+	{ value: "other", label: "Other" },
+];
+
+const inputStyle = {
+	borderColor: "#d5e3f5",
+	color: "#1a2340",
+	background: "#f4f8ff",
+};
+
+function HeroBookingForm() {
+	const [form, setForm] = useState({ name: "", phone: "", email: "", department: "" });
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (!form.name || !form.phone) return alert("Please enter name and phone number.");
+		setLoading(true);
+		const { error } = await supabase.from("contactdetails").insert([{
+			full_name: form.name,
+			phone_number: form.phone,
+			department: form.department || "General Inquiry",
+			date: new Date().toISOString(),
+			message: "Quick booking from homepage",
+			status: "new",
+		}]);
+		setLoading(false);
+		if (error) {
+			console.error("Supabase insert error:", error);
+			alert("Failed to submit: " + error.message);
+		} else {
+			setSuccess(true);
+			setForm({ name: "", phone: "", email: "", department: "" });
+			setTimeout(() => setSuccess(false), 4000);
+		}
+	};
+
+	return (
+		<div className="hidden lg:block lg:col-span-5">
+			<form
+				onSubmit={handleSubmit}
+				className="rounded-2xl p-8 shadow-2xl animate-scale-in delay-300 card-lift"
+				style={{ background: "#ffffff", border: "1px solid #d5e3f5", boxShadow: "0 20px 60px rgba(26,111,196,0.12)" }}
+			>
+				<h3 className="text-xl font-bold mb-1" style={{ color: "#1a2340" }}>Quick Booking</h3>
+				<p className="text-sm mb-6" style={{ color: "#7a8aaa" }}>Fill in the details to schedule your visit.</p>
+
+				{success && (
+					<div className="mb-4 p-3 rounded-lg text-sm font-medium text-center" style={{ background: "rgba(16,185,129,0.1)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)" }}>
+						✓ Booking submitted! We'll contact you shortly.
+					</div>
+				)}
+
+				<div className="space-y-4">
+					<div className="grid grid-cols-2 gap-4">
+						<div>
+							<label className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold" style={{ color: "#1a6fc4" }}>Patient Name *</label>
+							<input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Enter name" className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all" style={inputStyle} />
+						</div>
+						<div>
+							<label className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold" style={{ color: "#1a6fc4" }}>Phone Number *</label>
+							<input type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+91" className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all" style={inputStyle} />
+						</div>
+					</div>
+					<div>
+						<label className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold" style={{ color: "#1a6fc4" }}>Email</label>
+						<input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all" style={inputStyle} />
+					</div>
+					<div>
+						<label className="block text-[10px] uppercase tracking-widest mb-1.5 font-semibold" style={{ color: "#1a6fc4" }}>Department</label>
+						<select value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} className="w-full border rounded-lg p-3 text-sm focus:outline-none focus:ring-2 transition-all appearance-none" style={inputStyle}>
+							{DEPARTMENT_OPTIONS.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+						</select>
+					</div>
+					<button type="submit" disabled={loading} className="btn-primary w-full justify-center mt-2 text-sm py-4 disabled:opacity-60">
+						{loading ? "Submitting..." : "Book Appointment"}
+					</button>
+				</div>
+
+				<div className="mt-6 pt-6 flex items-center justify-between text-[11px]" style={{ borderTop: "1px solid #eaf1fb", color: "#7a8aaa" }}>
+					<p>Need immediate help?</p>
+					<a href="tel:9901984418" className="font-bold uppercase tracking-wider" style={{ color: "#e05c1a" }}>Call 9901984418</a>
+				</div>
+			</form>
+		</div>
+	);
+}
+
+function CTACallbackForm() {
+	const [form, setForm] = useState({ name: "", phone: "", email: "", department: "" });
+	const [loading, setLoading] = useState(false);
+	const [success, setSuccess] = useState(false);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (!form.name || !form.phone) return alert("Please enter name and phone number.");
+		setLoading(true);
+		const { error } = await supabase.from("contactdetails").insert([{
+			full_name: form.name,
+			phone_number: form.phone,
+			department: form.department || "Callback Request",
+			date: new Date().toISOString(),
+			message: "Callback request from homepage",
+			status: "new",
+		}]);
+		setLoading(false);
+		if (error) {
+			console.error("Supabase insert error:", error);
+			alert("Failed to submit: " + error.message);
+		} else {
+			setSuccess(true);
+			setForm({ name: "", phone: "", email: "", department: "" });
+			setTimeout(() => setSuccess(false), 4000);
+		}
+	};
+
+	return (
+		<div className="md:w-5/12 w-full rounded-2xl p-8 relative z-10" style={{ background: "#ffffff", boxShadow: "0 10px 40px rgba(0,0,0,0.15)" }}>
+			<h3 className="text-xl font-bold mb-6 text-center" style={{ color: "#1a2340" }}>Request Callback</h3>
+
+			{success && (
+				<div className="mb-4 p-3 rounded-lg text-sm font-medium text-center" style={{ background: "rgba(16,185,129,0.1)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)" }}>
+					✓ Request received! We'll call you back soon.
+				</div>
+			)}
+
+			<form onSubmit={handleSubmit} className="space-y-4">
+				<input type="text" required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your Name *" className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" style={inputStyle} />
+				<input type="tel" required value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="Phone Number *" className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" style={inputStyle} />
+				<input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="Email (optional)" className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all" style={inputStyle} />
+				<select value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} className="w-full border rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all appearance-none" style={inputStyle}>
+					{DEPARTMENT_OPTIONS.map((opt) => (<option key={opt.value} value={opt.value}>{opt.label}</option>))}
+				</select>
+				<button type="submit" disabled={loading} className="btn-primary w-full justify-center mt-2 text-sm py-4 disabled:opacity-60">
+					{loading ? "Submitting..." : "Request Callback"}
+				</button>
+			</form>
+		</div>
 	);
 }

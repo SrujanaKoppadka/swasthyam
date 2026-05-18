@@ -1,6 +1,7 @@
 import { HeartPulse, Sparkles, PhoneCall } from "lucide-react";
 import PageHeader from "../components/PageHeader";
 import { Link } from "react-router-dom";
+import swasthyamimg from "../assets/swasthyam-hospital.webp";
 
 export default function About() {
 	return (
@@ -36,7 +37,7 @@ export default function About() {
 							institution.
 						</p>
 
-						<div className="flex gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 							<div className="glass-card card-lift p-4 flex-1">
 								<div className="stat-line">
 									<h4 className="text-[#1a2340] font-bold text-2xl mb-1">
@@ -74,7 +75,7 @@ export default function About() {
 						<div className="aspect-square rounded-full bg-white absolute -top-10 -right-10 blur-3xl opacity-50 z-0"></div>
 						<div className="aspect-[4/5] rounded-tl-[100px] rounded-br-[100px] overflow-hidden relative z-10 border border-brand-orange/20 shadow-[0_0_50px_rgba(249,115,22,0.1)]">
 							<img
-								src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800&q=80"
+								src={swasthyamimg}
 								alt="Hospital Facility"
 								className="w-full h-full object-cover"
 							/>

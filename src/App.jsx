@@ -13,6 +13,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import Login from "./pages/dashboard/Login";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import DoctorsDashboard from "./pages/dashboard/DoctorsDashboard";
+import DashboardContact from "./pages/dashboard/DashboardContact";
 
 export default function App() {
 	return (
@@ -35,6 +36,7 @@ export default function App() {
 				<Route element={<DashboardLayout />}>
 					<Route index element={<DashboardHome />} />
 					<Route path="doctors" element={<DoctorsDashboard />} />
+					<Route path="contacts" element={<DashboardContact />} />
 				</Route>
 			</Route>
 		</Routes>

@@ -3,6 +3,7 @@ import { useAuth } from "../hooks/useAuth";
 import {
 	LayoutDashboard,
 	Users,
+	CalendarCheck,
 	LogOut,
 	Menu,
 	X,
@@ -15,6 +16,7 @@ import swasthyamlogo from "../assets/swasthyam-logo.jpg";
 const NAV_ITEMS = [
 	{ name: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
 	{ name: "Manage Doctors", path: "/dashboard/doctors", icon: Users },
+	{ name: "Contact Submissions", path: "/dashboard/contacts", icon: CalendarCheck },
 ];
 
 export default function DashboardLayout() {
